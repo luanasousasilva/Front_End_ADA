@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Filmes em Cards</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Catálogo de Filmes</h1>
+        <p class="subtitle"> Filmes </p>
+    </header>
+    <div class="crud-form">
+        <h2>Cadastrar / Atualizar Filme</h2>
+        <div class="grid">
+            <div class="filter-group">
+                <label for="nome">Nome</label>
+                <input id="nome" placeholder="Nome do filme/série" />
+            </div>
+            <div class="filter-group">
+                <label for="diretor">Diretor</label>
+                <input id="diretor" placeholder="Diretor (ou info textual)" />
+            </div>
+            <div class="filter-group">
+                <label for="avaliacao">Avaliação (0 a 10)</label>
+                <input id="avaliacao" type="number" min="0" max="10" step="0.1" />
+            </div>
+            <div class="filter-group">
+                <label for="data">Data de Lançamento</label>
+                <input id="data" type="date" />
+            </div>
+            <div class="filter-group">
+                <label for="duracao">Duração (min)</label>
+                <input id="duracao" type="number" min="0" />
+            </div>
+            <div class="filter-group">
+                <label for="streaming">Disponível em Streaming?</label>
+                <select id="streaming">
+                    <option value="true">Sim</option>
+                    <option value="false">Não</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="poster">Link do Poster (opcional)</label>
+                <input id="poster" placeholder="https://exemplo.com/poster.jpg" />
+            </div>
+        </div>
+        <div class="crud-actions">
+            <button id="btnSalvar">Salvar Filme</button>
+            <button id="btnAcessar">Acessar Filme</button>
+            <button id="btnExcluir">Excluir Filme</button>
+            <button id="btnclear">Limpar Formulario</button>
+        </div>
+        <div id="form-error" class="error"></div>
+    </div>
+    <div class="controls">
+        <div class="filters">
+            <div class="filter-group">
+                <label for="searchInput">Buscar filme:</label>
+                <input type="text" id="searchInput" placeholder="Digite o nome do filme...">
+            </div>
+            <div class="filter-group">
+                <label for="filterRating">Filtrar por avaliação:</label>
+                <select id="filterRating">
+                    <option value="0">Todas as avaliações</option>
+                    <option value="9">9 Excelente</option>
+                    <option value="8">8 Muito bom</option>
+                    <option value="7">7 Bom</option>
+                    <option value="6">6 Regular</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterStreaming">Disponível em streaming:</label>
+                <select id="filterStreaming">
+                    <option value="all">Todos</option>
+                    <option value="true">Disponível</option>
+                    <option value="false">Indisponível</option>
+                </select>
+            </div>
+        </div>
+        <div class="crud-actions">
+            <button id="sortRating">Ordenar por Avaliação</button>
+            <button id="sortName">Ordenar por Nome</button>
+            <button id="sortYear">Ordenar por Ano</button>
+        </div>
+    </div>
+    <div class="cards-container" id="cards-container"></div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
