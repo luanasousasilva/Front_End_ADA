@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "aula 01- introdução a variavel /main.js",
   "scripts": {
-    "start":  "http-server ./ -c-1"
+    "start": "http-server ./ -c-1 -p 8080 -a 127.0.0.1"
   },
   "keywords": [],
   "author": "",
