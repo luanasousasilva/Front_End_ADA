@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "aula 01- introdução a variavel /main.js",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start":  "http-server ./ -c-1"
   },
   "keywords": [],
   "author": "",
