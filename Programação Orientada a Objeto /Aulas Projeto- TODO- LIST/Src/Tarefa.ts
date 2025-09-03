@@ -1,7 +1,8 @@
 export class Tarefa {
-    private _descricao: string
-    public  concluida; boolean: any;
-    public  readonly id; number: any;
+    private readonly _descricao: string
+    public concluida: boolean;
+    public readonly id: number;
+
 
     constructor (id: number, descricao: string  ) {
         this.id = id;
