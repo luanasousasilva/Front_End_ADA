@@ -1,7 +1,7 @@
 import { Pedido } from './Pedido';
 
 export class Cliente {
-    private pedidos: Pedido[] = []; // array de pedidos do cliente
+    pedidos: Pedido[] = []; // array de pedidos do cliente
 
     constructor(
         public id: number,
