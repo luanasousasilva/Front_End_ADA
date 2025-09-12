@@ -44,6 +44,40 @@ console.log(cliente1);
 console.log('\nResumo do pedido 1:');
 console.log(pedido1.obterResumo());
 
+console.log('\n--- Testando validações do ItemPedido ---');
+console.log('\nTentando criar item com valor negativo...');
+const itemInvalido1 = new ItemPedido("Produto Ruim", -100, 1);
+console.log(itemInvalido1);
+
+console.log('\nTentando atribuir quantidade negativa a um item existente');
+console.log(`Quantidade original do item2: ${item2.quantidade}`);
+item2.quantidade = -5; // Deve mostrar mensagem de erro
+console.log(`Quantidade do item2 após tentativa de alteração: ${item2.quantidade}`);
+
+console.log('\n--- Testando método de total gasto ---');
+console.log(`\nTotal gasto por ${cliente1.nome}: R$ ${cliente1.calcularTotalGasto().toFixed(2)}`);
+
+console.log('\n--- Testando fluxo de entrega ---');
+console.log(`\n Status inicial do pedido 1: ${pedido1.status}`);
+pedido1.pagar();
+console.log(`\n Status do pedido 1 depois de pagar: ${pedido1.status}`);
+pedido1.enviar();
+console.log(`\n Status do pedido 1 depois de enviar: ${pedido1.status}`);
+pedido1.entregar();
+console.log(`\n Status do pedido 1 depois de entregar: ${pedido1.status}`);
+
+console.log('\n--- Testando validações dos clientes ---');
+console.log('Tentando criar um cliente com nome inválido...');
+const clienteInvalido1 = new Cliente(3, "A", "ana@email.com");
+
+console.log('Tentando criar um cliente com email inválido...');
+const clienteInvalido2 = new Cliente(4, "Beatriz", "beatrizemail.com");
+console.log(clienteInvalido2);
+console.log('Tentando alterar o nome do cliente para um nome inválido');
+const clienteValido = new Cliente(5, "Eduardo", "edu@email.com");
+console.log(`Nome original do cliente: ${clienteValido.nome}`);
+
+clienteValido.nome = "E";
+console.log(`Nome após a tentativa de alteração: ${clienteValido.nome}`);
 
 console.log('\n--- Sistema finalizado ---');
-

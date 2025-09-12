@@ -1,29 +1,60 @@
 import { Pedido } from './Pedido';
 
 export class Cliente {
-    pedidos: Pedido[] = []; // array de pedidos do cliente
-
+    public pedidos: Pedido[] = [];
+    private _id: number;
+    private _nome: string;
+    private _email: string;
     constructor(
-        public id: number,
-        public nome: string,
-        public email: string
+        id: number,
+        nome: string,
+        email: string
     ) {
-        console.log(`Cliente criado: ${this.nome} (${this.email})`);
+        this._id = id;
+        this._nome = ""; // Inicializa com valor seguro
+        this._email = ""; // Inicializa com valor seguro
+        this.nome = nome;
+        this.email = email;
+        console.log(`Cliente ${this.nome} criado com sucesso!`);
     }
 
-    // Adiciona um pedido ao cliente
+    public get id(): number {
+        return this._id;
+    }
+
+    public get nome(): string {
+        return this._nome;
+    }
+
+    public get email(): string {
+        return this._email;
+    }
+
+    public set nome(novoNome: string) {
+        if (novoNome.length >= 2) {
+            this._nome = novoNome;
+        } else {
+            console.log("Erro: O nome deve ter pelo menos 2 caracteres!");
+        }
+    }
+
+    public set email(novoEmail: string) {
+        if (novoEmail.includes('@')) {
+            this._email = novoEmail;
+        } else {
+            console.log("Erro: O e-mail informado é inválido!");
+        }
+    }
+
     public adicionarPedido(pedido: Pedido): void {
         this.pedidos.push(pedido);
-        console.log(`Pedido #${pedido.id} adicionado ao cliente ${this.nome}`);
     }
 
-    // Calcula o total gasto em todos os pedidos do cliente
     public calcularTotalGasto(): number {
-        return this.pedidos.reduce((acc, pedido) => acc + pedido.total, 0);
-    }
-
-    // Getter para acessar os pedidos de fora (somente leitura)
-    public get listaPedidos(): Pedido[] {
-        return this.pedidos;
+        let total = 0;
+        for (const pedido of this.pedidos) {
+            total += pedido.total;
+        }
+        return total;
     }
 }
