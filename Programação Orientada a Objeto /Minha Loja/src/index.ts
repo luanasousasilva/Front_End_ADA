@@ -29,8 +29,8 @@ pedido2.adicionarItem(item3);
 pedido2.adicionarItem(item4);
 
 // Associando pedidos aos clientes
-cliente1.pedidos.push(pedido1);
-cliente2.pedidos.push(pedido2);
+cliente1.adicionarPedido(pedido1);
+cliente2.adicionarPedido(pedido2);
 
 // Calculando o total dos pedidos
 console.log('\n--- Pedidos Criados ---');
@@ -79,5 +79,33 @@ console.log(`Nome original do cliente: ${clienteValido.nome}`);
 
 clienteValido.nome = "E";
 console.log(`Nome após a tentativa de alteração: ${clienteValido.nome}`);
+
+console.log("\n--- Testando Serialização ---");
+const jsonPedido = JSON.stringify(pedido1, null, 2);
+console.log(jsonPedido);
+
+console.log("\n--- Testando Desserialização ---");
+const dadosDoServidor = JSON.parse(jsonPedido);
+const pedidoRecriado = Pedido.fromData(dadosDoServidor, cliente1);
+console.log(pedidoRecriado);
+console.log(`Total do pedido recriado: R$ ${pedidoRecriado.total.toFixed(2)}`);
+
+console.log("\n--- Testando Serialização/Desserialização do cliente ---");
+const clienteOriginal = new Cliente(10, "Joana Silva", "joana@gmail.com");
+const jsonCliente = JSON.stringify(clienteOriginal.toJSON(), null, 2);
+console.log("Cliente Serializado:");
+console.log(jsonCliente);
+
+const clienteRecriado = Cliente.fromJSON(jsonCliente);
+console.log("Cliente recriado a partir do Json:");
+console.log(clienteRecriado);
+
+console.log("\n--- Testando Atualização Parcial e Validações ---");
+const patchData = {email: "novoemail.invalido", nome: "J"};
+console.log(`\n Aplicando atualizações: ${JSON.stringify(patchData)}`);
+clienteRecriado.aplicarAtualizacoes(patchData);
+console.log("\n Cliente após tentativa de atualização com dados inválidos:");
+console.log(clienteRecriado);
+
 
 console.log('\n--- Sistema finalizado ---');
