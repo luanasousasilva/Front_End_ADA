@@ -1,41 +1,24 @@
 import { Pedido } from "./Pedido";
 
-export class Cliente {
+export abstract class ClienteBase {
     public pedidos: Pedido[] = [];
     private _id: number;
-    private _nome: string;
     private _email: string;
     constructor(
         id: number,
-        nome: string,
         email: string
     ) {
         this._id = id;
-        this._nome = ""; // Inicializa com valor seguro
         this._email = ""; // Inicializa com valor seguro
-        this.nome = nome;
         this.email = email;
-        console.log(`Cliente ${this.nome} criado com sucesso!`);
     }
 
     public get id(): number {
         return this._id;
     }
 
-    public get nome(): string {
-        return this._nome;
-    }
-
     public get email(): string {
         return this._email;
-    }
-
-    public set nome(novoNome: string) {
-        if (novoNome.length >= 2) {
-            this._nome = novoNome;
-        } else {
-            console.log("Erro: O nome deve ter pelo menos 2 caracteres!");
-        }
     }
 
     public set email(novoEmail: string) {
@@ -61,21 +44,11 @@ export class Cliente {
     public toJSON() {
         return {
             id: this.id,
-            nome: this.nome,
             email: this.email
         }
     }
 
-    public static fromJSON(jsonData: string): Cliente {
-        const data = JSON.parse(jsonData);
-        return new Cliente(data.id, data.nome, data.email);
-    }
-
-
     public aplicarAtualizacoes(dados: any): void {
-        if(dados.nome) {
-            this.nome = dados.nome;
-        }
         if(dados.email) {
             this.email = dados.email;
         }

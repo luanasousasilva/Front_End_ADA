@@ -1,31 +1,23 @@
+import { Produto } from "./Produto";
+
 export class ItemPedido {
-    private _valorUnitario: number;
-    private _quantidade: number;
     constructor(
-        public nomeProduto: string,
-        valor: number,
-        quant: number
+        private _produto: Produto,
+        private _quantidade: number
     ){
-        this._valorUnitario = 0; // Inicializa com um valor seguro
-        this._quantidade = 0; // Inicializa com um valor seguro
-        this.valorUnitario = valor // Usa o SETTER
-        this.quantidade = quant  // Usa o SETTER
+
     }
 
     public get valorUnitario(): number {
-        return this._valorUnitario;
+        return this._produto.preco;
+    }
+
+    public get nomeProduto(): string {
+        return this._produto.nome
     }
 
     public get quantidade(): number {
         return this._quantidade;
-    }
-
-    public set valorUnitario(novoValor: number) {
-        if (novoValor > 0) {
-            this._valorUnitario = novoValor;
-        } else {
-            console.log("O valor unitário deve ser positivo!");
-        }
     }
 
     public set quantidade(novaQuantidade: number) {
@@ -43,14 +35,8 @@ export class ItemPedido {
 
     public toJSON() {
         return {
-            nomeProduto: this.nomeProduto,
-            valorUnitario: this._valorUnitario,
+            produto: this._produto.toJSON(),
             quantidade: this._quantidade
         }
     }
-
-    public static fromData(data: any): ItemPedido {
-        return new ItemPedido(data.nomeProduto, data.valorUnitario, data.quantidade);
-    }
-
 }
