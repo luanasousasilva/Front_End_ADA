@@ -10,4 +10,8 @@ export class ProdutoDigital extends Produto {
     ) {
         super(id, nome, preco, descricao)
     }
+
+    public override getDescricaoCompleta(): string {
+        return `${this.nome} (Digital) - Acesso via link: ${this.linkDownload}`;
+    }
 }

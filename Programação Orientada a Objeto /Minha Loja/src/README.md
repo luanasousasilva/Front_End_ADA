@@ -29,4 +29,4 @@ npm install
 ---
 
 Execute o arquivo de demosntração:
-npx ts-node Programação Orientada a Objeto /Minha Loja/src
+npx ts-node Programação Orientada a Objeto /Minha Loja/src/index.ts

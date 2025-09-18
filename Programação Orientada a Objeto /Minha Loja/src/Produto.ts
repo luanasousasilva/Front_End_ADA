@@ -6,6 +6,10 @@ export abstract class Produto {
         public descricao: string
     ){}
 
+    public getDescricaoCompleta(): string {
+        return `${this.nome} - ${this.preco.toFixed(2)}`;
+    }
+
     toJSON() {
         return {
             id: this.id,
@@ -15,4 +19,3 @@ export abstract class Produto {
         };
     }
 }
-

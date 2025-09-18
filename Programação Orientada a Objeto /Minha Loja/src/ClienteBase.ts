@@ -1,5 +1,4 @@
 import { Pedido } from "./Pedido";
-
 export abstract class ClienteBase {
     public pedidos: Pedido[] = [];
     private _id: number;

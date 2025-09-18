@@ -4,6 +4,7 @@ import { ProdutoFisico } from "./ProdutoFisico";
 import { ProdutoDigital } from "./ProdutoDigital";
 import {ClientePessoaFisica} from "./ClientePessoaFisica";
 import {ClientePessoaJuridica} from "./ClientePessoaJuridica";
+import {Produto} from "./Produto";
 
 console.log('--- Bem-vindo à Minha Loja! ---');
 
@@ -52,5 +53,16 @@ console.log("\n--- Pedidos Realizados ---");
 console.log(`Total gasto por ${clientePF.nome}: R$ ${clientePF.calcularTotalGasto().toFixed(2)}`);
 console.log(`Total gasto por ${clientePJ.razaoSocial}: R$ ${clientePJ.calcularTotalGasto().toFixed(2)}`);
 
+console.log("\n--- Testando Polimorfismo ---");
+const produtoFisico1 = new ProdutoFisico(3, "Cadeira Gamer", 1200, "Cadeira ergonômica para jogos", 12000);
+const produtoDigital1 = new ProdutoDigital(4, "Licença Photoshop", 150, "Licença de 1 ano para o Adobe Photoshop", "https://photoshop.com");
+
+const meusProdutos: Produto[] = [produtoFisico1, produtoDigital1, livro, ebook];
+
+meusProdutos.forEach(p => {
+    console.log(p.getDescricaoCompleta());
+    // O código aqui não se importa com o tipo exato de p
+    // Ele só confia que 'p' sabe se descrever
+})
 
 console.log('\n--- Sistema finalizado ---');

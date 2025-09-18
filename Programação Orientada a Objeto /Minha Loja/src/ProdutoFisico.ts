@@ -10,4 +10,9 @@ export class ProdutoFisico extends Produto {
     ) {
         super(id, nome, preco, descricao)
     }
+
+    public override getDescricaoCompleta(): string {
+        const descricaoBase = super.getDescricaoCompleta();
+        return `${descricaoBase} | Peso: ${this.pesoEmGramas}`;
+    }
 }
