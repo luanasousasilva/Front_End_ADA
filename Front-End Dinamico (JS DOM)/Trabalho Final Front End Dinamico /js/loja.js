@@ -1,18 +1,10 @@
-// js/loja.js (substitua seu arquivo atual por este)
-
-// seletores principais
 const catalogoProduto = document.querySelector('#catalogo');
 const destaqueProduto = document.getElementById('destaque');
-
 let listaDeProdutos = [];
 
-/* -------------------------
-   Modal de detalhes (cria/injeta uma vez)
-   ------------------------- */
 (function createProductDetailModal() {
     if (document.getElementById('productDetailOverlay')) return;
 
-    // injeta estilos do modal (não precisa mexer no CSS)
     const style = document.createElement('style');
     style.textContent = `
   #productDetailOverlay {
@@ -153,7 +145,6 @@ let listaDeProdutos = [];
 `;
     document.head.appendChild(style);
 
-    // cria overlay + modal
     const overlay = document.createElement('div');
     overlay.id = 'productDetailOverlay';
 
@@ -178,7 +169,6 @@ let listaDeProdutos = [];
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
 
-    // eventos de fechar
     overlay.addEventListener('click', (ev) => {
         if (ev.target === overlay) hideProductModal();
     });
@@ -187,39 +177,40 @@ let listaDeProdutos = [];
         if (ev.key === 'Escape') hideProductModal();
     });
 
-    // optional: add-to-cart (basic behavior: logs and closes)
     modal.querySelector('#pd-add').addEventListener('click', () => {
-        // comportamento simples: adiciona ao localStorage 'cart' (padrão), sem UI extra
         const id = modal.getAttribute('data-product-id');
         const produto = listaDeProdutos.find(p => String(p.id) === String(id));
         if (!produto) return;
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        cart.push({ id: produto.id, title: produto.title, price: produto.price, image: produto.image });
+        cart.push({id: produto.id, title: produto.title, price: produto.price, image: produto.image});
         localStorage.setItem('cart', JSON.stringify(cart));
-        // feedback rápido
+
         modal.querySelector('#pd-add').textContent = 'Adicionado ✓';
-        setTimeout(() => { modal.querySelector('#pd-add').textContent = 'Adicionar ao carrinho'; hideProductModal(); }, 900);
+        setTimeout(() => {
+            modal.querySelector('#pd-add').textContent = 'Adicionar ao carrinho';
+            hideProductModal();
+        }, 900);
     });
 
-    // expose functions to global (internal use)
     window._showProductModal = function (produto) {
-        // preencher campos
         const overlayEl = document.getElementById('productDetailOverlay');
         const modalEl = document.getElementById('productDetailModal');
         modalEl.setAttribute('data-product-id', produto.id);
         modalEl.querySelector('#pd-image').src = produto.image || 'https://picsum.photos/400/300';
         modalEl.querySelector('#pd-image').alt = produto.title || 'Produto';
         modalEl.querySelector('#pd-title').textContent = produto.title || 'Produto sem título';
-        modalEl.querySelector('#pd-price').textContent = (Number(produto.price) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        modalEl.querySelector('#pd-price').textContent = (Number(produto.price) || 0).toLocaleString('pt-BR', {
+            style: 'currency', currency: 'BRL'
+        });
         modalEl.querySelector('#pd-desc').textContent = produto.description || '';
         modalEl.querySelector('#pd-category').textContent = produto.category ? produto.category : '';
         overlayEl.classList.add('open');
-        // prevent background scroll
         document.documentElement.style.overflow = 'hidden';
         document.body.style.overflow = 'hidden';
     };
 
     window._hideProductModal = hideProductModal;
+
     function hideProductModal() {
         const overlayEl = document.getElementById('productDetailOverlay');
         if (!overlayEl) return;
@@ -229,11 +220,41 @@ let listaDeProdutos = [];
     }
 })();
 
-/* -------------------------
-   Funções existentes (mantive a sua estrutura)
-   ------------------------- */
 
-// Cria o card do produto
+document.addEventListener('DOMContentLoaded', () => {
+    const loginBtn = document.querySelector('.btn-entrar'); // usa o botão existente do HTML
+    const username = localStorage.getItem('username');
+
+    if (!loginBtn) return;
+
+    if (username && username.toLowerCase() === 'johnd') {
+        loginBtn.textContent = 'Painel Admin';
+        loginBtn.classList.remove('btn-primary');
+        loginBtn.classList.add('btn-warning');
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'admin.html';
+        });
+    } else if (username) {
+        loginBtn.textContent = 'Sair';
+        loginBtn.classList.remove('btn-primary');
+        loginBtn.classList.add('btn-secondary');
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('username');
+            window.location.reload();
+        });
+    } else {
+        loginBtn.textContent = 'Entrar';
+        loginBtn.classList.remove('btn-secondary', 'btn-warning');
+        loginBtn.classList.add('btn-primary');
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'login.html';
+        });
+    }
+});
+
 function criarCardProduto(produto) {
     const card = document.createElement('article');
     card.className = 'card-produto col-sm-12 col-md-6 col-lg-3 p-3 border rounded shadow-sm text-center';
@@ -256,15 +277,10 @@ function criarCardProduto(produto) {
         buscarDetalhesDoProduto(produto.id);
     });
 
-    card.appendChild(imagem);
-    card.appendChild(titulo);
-    card.appendChild(preco);
-    card.appendChild(botaoDetalhes);
-
+    card.append(imagem, titulo, preco, botaoDetalhes);
     return card;
 }
 
-// Renderiza os produtos no catálogo
 function renderizarProdutos() {
     catalogoProduto.innerHTML = '';
     listaDeProdutos.forEach(produto => {
@@ -273,25 +289,20 @@ function renderizarProdutos() {
     });
 }
 
-// Salva os produtos no localStorage
 function salvarProdutosNoStorage() {
     localStorage.setItem('produtos', JSON.stringify(listaDeProdutos));
 }
 
-// Carrega produtos da API
 async function carregarProdutos() {
     try {
         const response = await fetch('https://fakestoreapi.com/products');
-        if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
         const produtos = await response.json();
         listaDeProdutos = produtos;
 
         destaqueProduto.innerHTML = '';
         catalogoProduto.innerHTML = '';
 
-        // produto em destaque
         if (produtos.length > 0) {
             const cardDestaque = criarCardProduto(produtos[0]);
             destaqueProduto.appendChild(cardDestaque);
@@ -305,38 +316,30 @@ async function carregarProdutos() {
     }
 }
 
-// Exibe detalhes do produto (agora usa modal ao invés de alert)
 async function buscarDetalhesDoProduto(id) {
     try {
-        // tenta usar cache local antes de fetch (se já carregou listaDeProdutos)
         let produto = listaDeProdutos.find(p => String(p.id) === String(id));
         if (!produto) {
-            // caso não exista no array (ex.: carregado só parcialmente), faz fetch
             const response = await fetch(`https://fakestoreapi.com/products/${id}`);
             if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
             produto = await response.json();
         }
-        // mostra modal bonito com as informações
         window._showProductModal(produto);
     } catch (erro) {
         console.error("Erro ao buscar detalhes do produto:", erro);
-        // fallback simples: alert (apenas se modal falhar)
         alert('Não foi possível carregar os detalhes do produto.');
     }
 }
 
-// Inicializa a página
 window.onload = function () {
     const produtosSalvos = localStorage.getItem('produtos');
     if (produtosSalvos) {
         listaDeProdutos = JSON.parse(produtosSalvos);
-
         if (listaDeProdutos.length > 0) {
             destaqueProduto.innerHTML = '';
             const cardDestaque = criarCardProduto(listaDeProdutos[0]);
             destaqueProduto.appendChild(cardDestaque);
         }
-
         renderizarProdutos();
     } else {
         carregarProdutos();

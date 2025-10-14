@@ -1,17 +1,13 @@
-
-// Proteção de rota
 const username = localStorage.getItem('username');
-if(username !== 'johnd'){
-    window.location.href = 'index.html'
+if (!username) {
+    window.location.href = 'login.html';
 }
 
-// Mensagem de boas-vindas
 const boasVindas = document.getElementById('welcome-message');
 if (boasVindas) {
     boasVindas.innerText = `Olá, ${username}`
 }
 
-// Logout
 const botaoLogout = document.getElementById('logout-btn');
 if(botaoLogout) {
     botaoLogout.addEventListener('click', () => {
@@ -32,7 +28,7 @@ const deleteConfirmModal = new bootstrap.Modal(deleteConfirmModalElement);
 let products = [];
 let currentProductId = null;
 
-// Buscar produtos e renderizar a tabela
+
 async function fetchProducts() {
     try {
         const response = await fetch(API_URL);
@@ -43,7 +39,6 @@ async function fetchProducts() {
     }
 }
 
-// Renderizar produtos na tabela
 function renderProducts() {
     productsTableBody.innerHTML = '';
     products.forEach(product => {
@@ -62,7 +57,6 @@ function renderProducts() {
     });
 }
 
-// Abrir modal de edição
 function openEditModal(id) {
     currentProductId = id;
     const product = products.find(p => p.id === id);
@@ -76,13 +70,12 @@ function openEditModal(id) {
     productModal.show();
 }
 
-// Abrir modal de deleção
+
 function openDeleteModal(id) {
     currentProductId = id;
     deleteConfirmModal.show();
 }
 
-// Limpar formulário ao abrir modal para adicionar novo produto
 document.getElementById('add-product-btn').addEventListener('click', () => {
     currentProductId = null;
     productModalLabel.textContent = 'Adicionar Produto';
@@ -90,8 +83,6 @@ document.getElementById('add-product-btn').addEventListener('click', () => {
     document.getElementById('product-id').value = '';
 });
 
-
-// Lidar com o submit do formulário (Adicionar/Editar)
 productForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const id = document.getElementById('product-id').value;
@@ -114,12 +105,10 @@ productForm.addEventListener('submit', async (event) => {
         });
         const result = await response.json();
         console.log('Produto salvo:', result);
-
-        // A API de teste não atualiza o servidor, então vamos simular
-        if (id) { // Edição
+        if (id) {
             const index = products.findIndex(p => p.id == id);
             products[index] = { ...products[index], ...productData, id: parseInt(id) };
-        } else { // Adição
+        } else {
             products.push({ ...productData, id: result.id || (products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1) });
         }
         renderProducts();
@@ -130,12 +119,10 @@ productForm.addEventListener('submit', async (event) => {
     }
 });
 
-// Lidar com a confirmação de exclusão
 document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
     try {
         await fetch(`${API_URL}/${currentProductId}`, { method: 'DELETE' });
 
-        // A API de teste não atualiza o servidor, então vamos simular
         products = products.filter(p => p.id !== currentProductId);
         renderProducts();
         deleteConfirmModal.hide();
@@ -144,6 +131,4 @@ document.getElementById('confirm-delete-btn').addEventListener('click', async ()
         console.error('Erro ao deletar produto:', error);
     }
 });
-
-// Inicialização
 fetchProducts();

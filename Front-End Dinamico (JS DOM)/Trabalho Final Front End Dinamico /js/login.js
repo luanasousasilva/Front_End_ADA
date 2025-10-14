@@ -53,11 +53,7 @@
             if (data && data.token) {
 
                 localStorage.setItem('username', username);
-
-                // transição visual antes do redirecionamento
                 document.body.classList.add('fade-out');
-
-                // redireciona: johnd -> admin, outros -> index (loja)
                 setTimeout(() => {
                     if (username.toLowerCase() === 'johnd') {
                         window.location.href = 'admin.html';
@@ -74,6 +70,15 @@
         }
     });
 
+    const userLogado = localStorage.getItem('username');
+    if (userLogado) {
+        if (userLogado.toLowerCase() === 'johnd') {
+            window.location.href = 'admin.html';
+        } else {
+            window.location.href = 'index.html';
+        }
+    }
+
     function showError(msg) {
         if (!errorDiv) {
             alert(msg);
@@ -81,7 +86,6 @@
         }
         errorDiv.textContent = msg;
         errorDiv.classList.add('login-error');
-        // animação de shake
         errorDiv.classList.add('login-error--shake');
         setTimeout(() => errorDiv.classList.remove('login-error--shake'), 600);
     }
