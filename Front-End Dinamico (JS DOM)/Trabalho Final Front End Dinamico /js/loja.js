@@ -258,7 +258,7 @@ btnFecharCarrinho.addEventListener('click', () => {
 });
 
 window.addEventListener('load', async () => {
-    localStorage.removeItem('cart'); // Limpa o carrinho ao recarregar
+    localStorage.removeItem('cart');
     await carregarProdutos();
     renderizarCarrinho();
 });
