@@ -182,8 +182,13 @@ let listaDeProdutos = [];
         const produto = listaDeProdutos.find(p => String(p.id) === String(id));
         if (!produto) return;
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        cart.push({id: produto.id, title: produto.title, price: produto.price, image: produto.image});
+        cart.push({ id: produto.id, title: produto.title, price: produto.price, image: produto.image });
         localStorage.setItem('cart', JSON.stringify(cart));
+
+        if (!listaDeProdutos.some(p => p.id === produto.id)) {
+            listaDeProdutos.push(produto);
+            localStorage.setItem('produtos', JSON.stringify(listaDeProdutos));
+        }
 
         modal.querySelector('#pd-add').textContent = 'Adicionado ✓';
         setTimeout(() => {
@@ -220,15 +225,14 @@ let listaDeProdutos = [];
     }
 })();
 
-
 document.addEventListener('DOMContentLoaded', () => {
-    const loginBtn = document.querySelector('.btn-entrar'); // usa o botão existente do HTML
+    const loginBtn = document.querySelector('.btn-entrar');
     const username = localStorage.getItem('username');
 
     if (!loginBtn) return;
 
     if (username && username.toLowerCase() === 'johnd') {
-        loginBtn.textContent = 'Painel Admin';
+        loginBtn.textContent = 'Admin';
         loginBtn.classList.remove('btn-primary');
         loginBtn.classList.add('btn-warning');
         loginBtn.addEventListener('click', (e) => {
@@ -331,7 +335,7 @@ async function buscarDetalhesDoProduto(id) {
     }
 }
 
-window.onload = function () {
+window.onload = async function () {
     const produtosSalvos = localStorage.getItem('produtos');
     if (produtosSalvos) {
         listaDeProdutos = JSON.parse(produtosSalvos);
@@ -342,6 +346,24 @@ window.onload = function () {
         }
         renderizarProdutos();
     } else {
-        carregarProdutos();
+        await carregarProdutos();
+        renderizarProdutos();
     }
 };
+window.addEventListener('storage', (event) => {
+    if (event.key === 'produtos') {
+        const novosProdutos = JSON.parse(event.newValue || '[]');
+        if (Array.isArray(novosProdutos) && novosProdutos.length > 0) {
+            listaDeProdutos = novosProdutos;
+
+
+            destaqueProduto.innerHTML = '';
+            if (listaDeProdutos.length > 0) {
+                const cardDestaque = criarCardProduto(listaDeProdutos[0]);
+                destaqueProduto.appendChild(cardDestaque);
+            }
+
+            renderizarProdutos();
+        }
+    }
+});

@@ -5,11 +5,11 @@ if (!username) {
 
 const boasVindas = document.getElementById('welcome-message');
 if (boasVindas) {
-    boasVindas.innerText = `Olá, ${username}`
+    boasVindas.innerText = `Olá, ${username}`;
 }
 
 const botaoLogout = document.getElementById('logout-btn');
-if(botaoLogout) {
+if (botaoLogout) {
     botaoLogout.addEventListener('click', () => {
         localStorage.removeItem('username');
         window.location.href = 'index.html';
@@ -28,12 +28,16 @@ const deleteConfirmModal = new bootstrap.Modal(deleteConfirmModalElement);
 let products = [];
 let currentProductId = null;
 
+function salvarProdutosNaLoja() {
+    localStorage.setItem('produtos', JSON.stringify(products));
+}
 
 async function fetchProducts() {
     try {
         const response = await fetch(API_URL);
         products = await response.json();
         renderProducts();
+        salvarProdutosNaLoja();
     } catch (error) {
         console.error('Erro ao buscar produtos:', error);
     }
@@ -70,7 +74,6 @@ function openEditModal(id) {
     productModal.show();
 }
 
-
 function openDeleteModal(id) {
     currentProductId = id;
     deleteConfirmModal.show();
@@ -85,6 +88,7 @@ document.getElementById('add-product-btn').addEventListener('click', () => {
 
 productForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+
     const id = document.getElementById('product-id').value;
     const productData = {
         title: document.getElementById('product-title').value,
@@ -105,13 +109,17 @@ productForm.addEventListener('submit', async (event) => {
         });
         const result = await response.json();
         console.log('Produto salvo:', result);
+
         if (id) {
             const index = products.findIndex(p => p.id == id);
             products[index] = { ...products[index], ...productData, id: parseInt(id) };
         } else {
-            products.push({ ...productData, id: result.id || (products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1) });
+            const novoId = result.id || (products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1);
+            products.push({ ...productData, id: novoId });
         }
+
         renderProducts();
+        salvarProdutosNaLoja();
         productModal.hide();
 
     } catch (error) {
@@ -122,13 +130,39 @@ productForm.addEventListener('submit', async (event) => {
 document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
     try {
         await fetch(`${API_URL}/${currentProductId}`, { method: 'DELETE' });
-
         products = products.filter(p => p.id !== currentProductId);
         renderProducts();
+        salvarProdutosNaLoja();
         deleteConfirmModal.hide();
         currentProductId = null;
     } catch (error) {
         console.error('Erro ao deletar produto:', error);
     }
 });
-fetchProducts();
+
+
+async function inicializarProdutos() {
+    const produtosSalvos = localStorage.getItem('produtos');
+    if (produtosSalvos) {
+        products = JSON.parse(produtosSalvos);
+        renderProducts();
+    } else {
+        await fetchProducts();
+    }
+}
+
+inicializarProdutos();
+
+window.addEventListener('storage', (event) => {
+    if (event.key === 'produtos') {
+        const novosProdutos = JSON.parse(event.newValue || '[]');
+        if (Array.isArray(novosProdutos)) {
+            products = novosProdutos;
+            renderProducts();
+        }
+    }
+
+    if (event.key === 'username' && !event.newValue) {
+        window.location.href = 'index.html';
+    }
+});
