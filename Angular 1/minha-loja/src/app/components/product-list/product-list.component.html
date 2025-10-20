@@ -1,0 +1,14 @@
+<h2>Nossos produtos</h2>
+
+<div>
+  <button
+    *ngFor="let product of products; trackBy: trackByProductId"
+    (click)="selectProduct(product)"
+  >
+    {{ product.name }}
+  </button>
+</div>
+
+<div *ngIf="selectedProduct">
+  <app-product-detail [product]="selectedProduct"></app-product-detail>
+</div>
