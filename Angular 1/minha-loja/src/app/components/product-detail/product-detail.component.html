@@ -1,17 +1,63 @@
-<div>
-  <h3>{{ product.name  | uppercase}} <span style="color: red;">{{ product.onSale ? '- Em promoção  ' : '' }}</span></h3>
-  <p>{{ product.description }}</p>
-  <div *ngIf="product.onSale">
-    <strong style="text-decoration: line-through;">
-      {{ product.price | currency:'BRL' }}
-    </strong>
-    <strong style="color: green; margin-left: 10px;">
-      {{ discountedPrice | currency:'BRL' }}
-    </strong>
+<div class="container my-5">
+  <div class="card product-detail shadow-sm border-0">
+    <div class="row g-0 align-items-center">
+      <!-- IMAGEM DO PRODUTO -->
+      <div class="col-md-5 text-center p-3">
+        <img
+          [src]="product.imgUrl"
+          [alt]="product.name"
+          class="img-fluid rounded-3 product-image"
+          [class.zoomed]="isZoomed"
+          (mouseenter)="isZoomed = true"
+          (mouseleave)="isZoomed = false"
+         alt=""/>
+      </div>
+
+      <!-- DETALHES -->
+      <div class="col-md-7">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3 class="card-title mb-0 text-uppercase">{{ product.name }}</h3>
+            <span
+              class="badge"
+              [ngClass]="product.onSale ? 'bg-danger' : 'bg-secondary'"
+            >
+              {{ product.onSale}}
+            </span>
+          </div>
+
+          <p class="card-text text-muted mb-3">{{ product.description }}</p>
+
+          <div *ngIf="product.onSale; else normalPrice">
+            <p class="price-container">
+              <span class="original-price">{{ product.price | currency:'BRL' }}</span>
+              <span class="discounted-price">{{ discountedPrice | currency:'BRL' }}</span>
+            </p>
+          </div>
+
+          <ng-template #normalPrice>
+            <p class="price-container">
+              <span class="discounted-price">{{ product.price | currency:'BRL' }}</span>
+            </p>
+          </ng-template>
+
+          <hr />
+
+          <p class="card-text mb-1">
+            <small class="text-muted">
+              <i class="bi bi-calendar-event me-1"></i>
+              Lançamento: {{ product.launchDate | date:'dd/MM/yyyy' }}
+            </small>
+          </p>
+
+          <p class="card-text">
+            <small class="text-muted">
+              <i class="bi bi-check-circle me-1"></i>
+              Status: {{ product.available ? 'Disponível' : 'Indisponível' }}
+            </small>
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
-  <div *ngIf="!product.onSale">
-    <p>{{ product.price | currency:'BRL' }}</p>
-  </div>
-  <p>Data de lançamento: {{ product.launchDate | date:'dd/MM/yyyy' }}</p>
-  <p>Status: {{ product.available }}</p>
 </div>
