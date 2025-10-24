@@ -7,15 +7,16 @@ import { OnSalePipe } from './pipes/on-sale.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent,
+
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ProductListComponent
+    ProductListComponent,
+    AppComponent
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  
 })
 export class AppModule { }
