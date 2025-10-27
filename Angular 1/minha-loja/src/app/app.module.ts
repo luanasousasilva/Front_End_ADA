@@ -1,22 +1,16 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ProductListComponent } from './components/product-list/product-list.component';
-import { OnSalePipe } from './pipes/on-sale.pipe';
+import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-
-
-  ],
+  declarations: [AppComponent],  // Apenas AppComponent se os outros forem standalone
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ProductListComponent,
-    AppComponent
+    HttpClientModule
   ],
-  providers: [],
-  
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

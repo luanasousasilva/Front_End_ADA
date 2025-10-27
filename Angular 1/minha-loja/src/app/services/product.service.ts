@@ -1,45 +1,22 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ProductService {
 
-  constructor() { }
+  private apiUrl = 'https://fakestoreapi.com'
 
-  getProducts() {
-    return [
-      {
-        id: 1,
-        name: 'Playstation 5',
-        description: 'Um console de última geração para jogos',
-        price: 3500,
-        launchDate: new Date('2025-10-15'),
-        available: true,
-        onSale: true,
-        discount: 0.20
-      },
-      {
-        id: 2,
-        name: 'Notebook Gamer',
-        description: 'Leve e poderoso para suas tarefas',
-        price: 5200,
-        launchDate: new Date('2025-10-18'),
-        available: false,
-        onSale: false,
-        discount: 0
-      },
-      {
-        id: 3,
-        name: 'Fone de ouvido Bluetooth',
-        description: 'Som de alta qualidade',
-        price: 450,
-        launchDate: new Date('2025-10-06'),
-        available: true,
-        onSale: true,
-        discount: 0.15
-      }
-    ];
+  constructor( private http: HttpClient ) { }
+
+  getProducts(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/products`);
+  }
+
+  getProductById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/products/${id}`);
   }
 }
-

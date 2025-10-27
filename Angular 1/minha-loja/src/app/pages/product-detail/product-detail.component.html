@@ -1,0 +1,28 @@
+@if (product){
+<div class="card product-detail">
+  <div class="row g-0">
+    <div class="col-md-5">
+      <img
+        [src]="product.image"
+        class="img-fluid rounded-start"
+        [alt]="product.title"
+        [class.zoomed]="isZoomed"
+        (mouseenter)="isZoomed = true"
+        (mouseleave)="isZoomed = false"
+      />
+    </div>
+    <div class="col-md-7">
+      <div class="card-body">
+        <h3 class="card-title d-flex justify-content-between align-itens-center">
+          {{ product.title | uppercase}}
+        </h3>
+        <p class="card-text">{{ product.description }}</p>
+        <p class="card-text">Preço: <strong>{{ product.price | currency:'BRL' }}</strong></p>
+        <a routerLink="/" class="btn btn-secondary">Voltar para a Lista</a>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+Carregando detalhes do produto...
+}

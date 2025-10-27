@@ -1,0 +1,19 @@
+<h2>Nossos produtos</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  @for (product of products; track product.id) {
+  <div class="col">
+    <div class="card h-100">
+      <img [src]="product.image" class="card-img-top" [alt]="product.title" />
+      <div class="card-body">
+        <h4 class="card-title">{{ product.title }}</h4>
+        <p class="card-text">
+          <strong>{{ product.price | currency:'BRL' }}</strong>
+        </p>
+        <a [routerLink]="['/product', product.id]" class="btn btn-primary">
+          Ver detalhes
+        </a>
+      </div>
+    </div>
+  </div>
+  }
+</div>

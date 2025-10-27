@@ -1,0 +1,52 @@
+.product-detail .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.product-detail img {
+  object-fit: cover;
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.price-container {
+  display: flex;
+  align-items: center;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999999;
+  margin-right: 10px;
+}
+
+.discounted-price {
+  color: green;
+  font-weight: bold;
+}
+
+.zoomed {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .product-detail .row {
+    flex-direction: column;
+  }
+
+  .card-title {
+    display: block !important;
+  }
+
+  .product-detail .col-md-5,
+  .product-detail .col-md-7 {
+    width: 100%;
+  }
+
+  .product-detail img {
+    max-height: 250px;
+    border-radius: 0.25rem 0.25rem 0 0 !important;
+  }
+}
