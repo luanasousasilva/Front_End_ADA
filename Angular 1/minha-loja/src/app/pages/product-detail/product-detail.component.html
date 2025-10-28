@@ -19,6 +19,7 @@
         <p class="card-text">{{ product.description }}</p>
         <p class="card-text">Preço: <strong>{{ product.price | currency:'BRL' }}</strong></p>
         <a routerLink="/" class="btn btn-secondary">Voltar para a Lista</a>
+        <button (click)="addToCart()" class="btn btn-primary ms-2">Adicionar ao carrinho</button>
       </div>
     </div>
   </div>

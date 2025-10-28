@@ -4,10 +4,13 @@ import { importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app/app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { provideStore } from '@ngrx/store';
+import { cartReducer } from "./app/store/cart.reducer";
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(HttpClientModule), // <<< Registra HttpClient globalmente
-    provideRouter(routes)
+    importProvidersFrom(HttpClientModule),
+    provideRouter(routes),
+    provideStore({ cart: cartReducer }) // <<< Registra o Store globalmente
   ]
 }).catch(err => console.error(err));

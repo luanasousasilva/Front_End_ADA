@@ -1,4 +1,10 @@
-<h2>Nossos produtos</h2>
+<app-category-list (categorySelected)="onCategorySelected($event)"></app-category-list>
+<div class="d-flex justify-content-between align-itens-center mt-4">
+  <h2>Nossos produtos</h2>
+  <button class="btn btn-secondary" (click)="loadProducts()">
+    Ver todos os produtos
+  </button>
+</div>
 <div class="row row-cols-1 row-cols-md-3 g-4">
   @for (product of products; track product.id) {
   <div class="col">
