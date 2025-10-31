@@ -1,1 +1,29 @@
-<p>shopping-cart works!</p>
+<h2>Carrinho de compras</h2>
+
+@if (cartItems | async; as items) {
+@if (items.length > 0) {
+<table class="table">
+  <thead>
+  <tr>
+    <th>Produto</th>
+    <th>Preço</th>
+    <th>Ações</th>
+  </tr>
+  </thead>
+  <tbody>
+  @for (item of items; track item.index) {
+  <tr>
+    <td>{{ item.title }}</td>
+    <td>{{ item.price | currency:'BRL' }}</td>
+    <td>
+      <button (click)="removeItem(item.id)" class="btn btn-sm btn-danger">Remover</button>
+    </td>
+  </tr>
+  }
+  </tbody>
+</table>
+<button (click)="clearCart()" class="btn btn-warning mt-4">Limpar carrinho</button>
+} @else {
+<p>O seu carrinho está vazio!</p>
+}
+}
