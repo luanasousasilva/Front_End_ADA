@@ -1,4 +1,14 @@
-<header class="bg-dark text-white text-center p-3 header-container">
-  <h1>Nossa loja online</h1>
-  <app-cart-status></app-cart-status>
+<header class="header-modern">
+  <div class="container">
+    <div class="header-content">
+      <h1 class="logo">🛍️ Lojinha Online</h1>
+      <div class="header-actions">
+        <app-cart-status></app-cart-status>
+        <a routerLink="/cart" class="btn btn-modern cart-btn">
+          <i class="fas fa-shopping-cart me-2"></i>
+          Ver Carrinho
+        </a>
+      </div>
+    </div>
+  </div>
 </header>
