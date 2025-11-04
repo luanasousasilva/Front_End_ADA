@@ -4,8 +4,9 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'availability'
 })
 export class AvailabilityPipe implements PipeTransform {
-  transform(value: any): string {
-    return value ? 'Disponível' : 'Indisponível';
+
+  transform(value: boolean): string {
+    return value ? 'Disponível em estoque' : 'Produto Indisponível';
   }
 
 }

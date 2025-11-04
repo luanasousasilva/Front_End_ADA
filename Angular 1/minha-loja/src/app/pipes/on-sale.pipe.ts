@@ -1,11 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'onSale' // 👈 nome do pipe em minúsculas
+  name: 'onSale'
 })
 export class OnSalePipe implements PipeTransform {
-  transform(value: boolean): string {
-    return value ? 'Em promoção' : 'Preço normal';
-  }
-}
 
+  transform(value: unknown, ...args: any[]): unknown {
+    const [ customText ] = args;
+    return value ? (customText || 'EM PROMOÇÃO!') : '';
+  }
+
+}
