@@ -1,25 +1,74 @@
-<app-category-list (categorySelected)="onCategorySelected($event)"></app-category-list>
-<div class="d-flex justify-content-between align-itens-center mt-4">
-  <h2>Nossos produtos</h2>
-  <button class="btn btn-secondary" (click)="loadProducts()">
-    Ver todos os produtos
-  </button>
-</div>
-<div class="row row-cols-1 row-cols-md-3 g-4">
-  @for (product of products; track product.id) {
-  <div class="col">
-    <div class="card h-100">
-      <img [src]="product.image" class="card-img-top" [alt]="product.title" />
-      <div class="card-body">
-        <h4 class="card-title">{{ product.title }}</h4>
-        <p class="card-text">
-          <strong>{{ product.price | currency:'BRL' }}</strong>
-        </p>
-        <a [routerLink]="['/product', product.id]" class="btn btn-primary">
-          Ver detalhes
-        </a>
+<div class="container py-4">
+  <div class="hero-section glass-card p-5 mb-5 text-center">
+    <h1 class="display-4 fw-bold mb-3">🎉 Nossos Produtos</h1>
+    <p class="lead text-muted mb-4">Descubra produtos incríveis com os melhores preços do mercado</p>
+    <div class="hero-actions">
+      <button class="btn btn-hero-primary" (click)="loadProducts()">
+        <i class="fas fa-sync-alt me-2"></i>
+        Ver Todos os Produtos
+      </button>
+      <a routerLink="/contact" class="btn btn-hero-secondary">
+        <i class="fas fa-envelope me-2"></i>
+        Fale Conosco
+      </a>
+    </div>
+  </div>
+
+  <div class="categories-section mb-5">
+    <app-category-list (categorySelected)="onCategorySelected($event)"></app-category-list>
+  </div>
+
+  <div class="products-header glass-card p-4 mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h2 class="mb-0">
+          <i class="fas fa-boxes me-2 text-primary"></i>
+          Produtos Disponíveis
+          <span class="badge bg-primary ms-2 fs-6">{{ products.length }}</span>
+        </h2>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <div class="sort-controls">
+          <button class="btn btn-outline-primary btn-sm" (click)="loadProducts()">
+            <i class="fas fa-random me-1"></i>
+            Misturar
+          </button>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+    @for (product of products; track product.id) {
+    <div class="col">
+      <app-product-card
+        [product]="product"
+        [showCategory]="true">
+      </app-product-card>
+    </div>
+    }
+  </div>
+
+  @if (products.length === 0) {
+  <div class="empty-state glass-card p-5 text-center my-5">
+    <div class="empty-icon mb-4">
+      <i class="fas fa-search fa-4x text-muted"></i>
+    </div>
+    <h3 class="text-muted mb-3">Nenhum produto encontrado</h3>
+    <p class="text-muted mb-4">Tente selecionar outra categoria ou recarregar os produtos</p>
+    <button class="btn btn-modern" (click)="loadProducts()">
+      <i class="fas fa-sync-alt me-2"></i>
+      Recarregar Produtos
+    </button>
+  </div>
+  }
+
+  @if (products.length > 0) {
+  <div class="text-center mt-5">
+    <button class="btn btn-load-more" (click)="loadProducts()">
+      <i class="fas fa-redo me-2"></i>
+      Carregar Mais Produtos
+    </button>
   </div>
   }
 </div>

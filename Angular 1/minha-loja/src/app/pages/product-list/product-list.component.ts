@@ -2,16 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from "@angular/router";
-import { CategoryListComponent } from "../../components/category-list/category-list.component";
+import { CategoryListComponent } from '../../components/category-list/category-list.component';
+import { Product } from "../../../types";
+import { ProductCardComponent } from "../../components/product-card/product-card.component";
+
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, CategoryListComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    CategoryListComponent,
+    ProductCardComponent
+  ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
 export class ProductListComponent implements OnInit {
-  products: any[] = [];
+  products: Product[] = [];
 
   constructor(private productService: ProductService) {}
 
