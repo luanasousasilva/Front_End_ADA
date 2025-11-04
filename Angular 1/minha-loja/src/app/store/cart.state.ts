@@ -1,9 +1,13 @@
+import {CartItem} from "../../types";
+
 export interface CartState {
-  items: any[];
+  items: CartItem[];
   total: number;
+  itemCount: number;
 }
 
 export const initialState: CartState = {
   items: [],
-  total: 0
+  total: 0,
+  itemCount: 0
 }
