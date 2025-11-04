@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { CategoryService } from '../../services/services/category.service';
+import { CategoryService } from '../../services/category.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

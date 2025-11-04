@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { CartState } from '../../store/cart.state';
 
 @Component({
   selector: 'app-cart-status',
-  standalone: true,
   imports: [ CommonModule ],
   templateUrl: './cart-status.component.html',
-  styleUrls: ['./cart-status.component.css']
+  styleUrl: './cart-status.component.css'
 })
 export class CartStatusComponent {
   cartItemCount: Observable<number>;
 
-  constructor(private store: Store<{ cart: { items: any[] } }>) {
-    this.cartItemCount = this.store.pipe(select(state => state.cart.items.length));
+  constructor(private store: Store<{ cart: CartState }>) {
+    this.cartItemCount = this.store.select(state => state.cart.items.length);
   }
 }
