@@ -1,3 +1,11 @@
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  role: 'admin' | 'user';
+}
+
 export interface Product {
   id: number;
   title: string;
@@ -9,10 +17,10 @@ export interface Product {
     rate: number;
     count: number;
   };
-  availability?: boolean;
+  createdAt: string;
+  stock: number;
 }
 
 export interface CartItem extends Product {
   quantity: number;
-
 }
