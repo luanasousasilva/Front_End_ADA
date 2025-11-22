@@ -62,4 +62,7 @@ export class CheckoutComponent {
       control?.markAsTouched();
     });
   }
+  goToPayment(): void {
+    this.router.navigate(['/payment']);
+  }
 }

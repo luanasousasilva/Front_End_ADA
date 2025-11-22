@@ -100,8 +100,8 @@
             </div>
           </div>
           <div class="d-grid gap-2 mt-4">
-            <button type="submit" [disabled]="checkoutForm.invalid" class="btn btn-modern btn-lg">
-              ✅ Finalizar Pedido
+            <button (click)="goToPayment()" class="btn btn-modern">
+              🚀 Finalizar Compra
             </button>
             <a routerLink="/cart" class="btn btn-outline-secondary">
               ← Voltar ao Carrinho
