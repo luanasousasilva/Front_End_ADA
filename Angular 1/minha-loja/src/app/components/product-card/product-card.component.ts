@@ -5,14 +5,19 @@ import { Product } from '../../../types';
 import { Store } from '@ngrx/store';
 import * as CartActions from '../../store/cart.actions';
 import { TruncatePipe } from "../../../truncate.pipe";
+import { OnSalePipe } from "../../pipes/on-sale.pipe";
 import { AuthService } from "../../services/auth.service";
 import { ProductManagementService } from "../../services/product-management.service";
-import {OnSalePipe} from "../../pipes/on-sale.pipe";
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule, RouterLink, TruncatePipe,OnSalePipe ],
+  imports: [
+    CommonModule,
+    RouterLink,
+    TruncatePipe,
+    OnSalePipe
+  ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css'
 })

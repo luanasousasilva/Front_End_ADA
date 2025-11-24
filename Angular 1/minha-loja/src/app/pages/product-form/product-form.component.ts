@@ -26,6 +26,8 @@ export class ProductFormComponent implements OnInit {
   productId: number | null = null;
   isLoading = false;
   categories: string[] = [];
+  selectedFile: File | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
 
   constructor() {
     this.productForm = this.fb.group({
@@ -33,7 +35,8 @@ export class ProductFormComponent implements OnInit {
       price: ['', [Validators.required, Validators.min(0.01)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
       category: ['', Validators.required],
-      image: ['', Validators.required]
+      image: ['', Validators.required],
+      stock: [10, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -64,6 +67,7 @@ export class ProductFormComponent implements OnInit {
   loadProductData(): void {
     if (this.productId) {
       this.isLoading = true;
+
       const customProduct = this.productManagementService.getProductById(this.productId);
       if (customProduct && this.productManagementService.isCustomProduct(customProduct)) {
         this.productForm.patchValue({
@@ -71,8 +75,10 @@ export class ProductFormComponent implements OnInit {
           price: customProduct.price,
           description: customProduct.description,
           category: customProduct.category,
-          image: customProduct.image
+          image: customProduct.image,
+          stock: customProduct.stock || 10
         });
+        this.imagePreview = customProduct.image;
         this.isLoading = false;
       } else {
         this.adminService.getProductById(this.productId).subscribe({
@@ -82,8 +88,10 @@ export class ProductFormComponent implements OnInit {
               price: product.price,
               description: product.description,
               category: product.category,
-              image: product.image
+              image: product.image,
+              stock: product.stock || 10
             });
+            this.imagePreview = product.image;
             this.isLoading = false;
           },
           error: (error) => {
@@ -93,6 +101,45 @@ export class ProductFormComponent implements OnInit {
         });
       }
     }
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      // Validar tipo de arquivo
+      if (!file.type.startsWith('image/')) {
+        alert('Por favor, selecione apenas arquivos de imagem.');
+        return;
+      }
+
+      // Validar tamanho do arquivo (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('A imagem deve ter no máximo 5MB.');
+        return;
+      }
+
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+        this.productForm.patchValue({
+          image: reader.result as string
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage(): void {
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.productForm.patchValue({
+      image: ''
+    });
+    // Reset file input
+    const fileInput = document.getElementById('imageFile') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   }
 
   onImageError(event: Event): void {
@@ -110,7 +157,6 @@ export class ProductFormComponent implements OnInit {
         ...productData,
         rating: { rate: 4.5, count: 0 },
         createdAt: new Date().toISOString().split('T')[0],
-        stock: 10,
         createdBy: currentUser?.id,
         isCustom: true,
         source: 'custom'

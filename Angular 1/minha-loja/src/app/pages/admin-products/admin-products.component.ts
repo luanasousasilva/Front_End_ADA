@@ -91,7 +91,6 @@ export class AdminProductsComponent implements OnInit {
       this.productManagementService.deleteProduct(this.productToDelete);
       this.showDeleteModal = false;
       this.productToDelete = null;
-      // Recarrega a lista
       this.loadAllProducts();
     }
   }
