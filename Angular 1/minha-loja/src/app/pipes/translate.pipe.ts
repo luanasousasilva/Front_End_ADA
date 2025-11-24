@@ -4,7 +4,7 @@ import { TranslationService } from '../services/translation.service';
 @Pipe({
   name: 'translate',
   standalone: true,
-  pure: false // Importante para detectar mudanças de idioma
+  pure: false
 })
 export class TranslatePipe implements PipeTransform {
   constructor(private translationService: TranslationService) {}

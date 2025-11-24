@@ -23,7 +23,6 @@ export class ProductManagementService {
     return this.productsSubject.value.find(product => product.id === id);
   }
 
-  // Método para identificar claramente produtos customizados
   isCustomProduct(product: Product): boolean {
     return product.isCustom === true && product.source === 'custom' && product.createdBy !== undefined;
   }
