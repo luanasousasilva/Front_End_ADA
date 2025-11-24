@@ -4,7 +4,6 @@
     <p class="text-muted mb-0">Complete suas informações para finalizar o pedido</p>
   </div>
 
-  <!-- Steps Indicator -->
   <div class="steps-indicator glass-card p-4 mb-4">
     <div class="steps">
       <div class="step" [class]="getStepClass(1)">
@@ -27,7 +26,6 @@
       <div class="glass-card p-4">
         <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()">
 
-          <!-- Step 1: Dados Pessoais -->
           @if (currentStep === 1) {
           <div class="step-content">
             <h4 class="mb-4">👤 Dados Pessoais</h4>
@@ -64,7 +62,6 @@
           </div>
           }
 
-          <!-- Step 2: Pagamento -->
           @if (currentStep === 2) {
           <div class="step-content">
             <h4 class="mb-4">💳 Dados de Pagamento</h4>
@@ -101,7 +98,6 @@
           </div>
           }
 
-          <!-- Step 3: Confirmação -->
           @if (currentStep === 3) {
           <div class="step-content">
             <h4 class="mb-4">✅ Confirmação do Pedido</h4>

@@ -2,10 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Product } from '../../../types';
-import { TruncatePipe } from "../../../truncate.pipe";
 import { TranslatePipe } from "../../pipes/translate.pipe";
 import { ProductManagementService } from "../../services/product-management.service";
 import { AdminService } from "../../services/admin.service";
+import {TruncatePipe} from "../../pipes/truncate.pipe";
 
 @Component({
   selector: 'app-admin-products',

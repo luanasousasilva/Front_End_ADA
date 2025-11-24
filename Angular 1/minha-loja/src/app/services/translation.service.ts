@@ -16,7 +16,6 @@ export class TranslationService {
 
   private translations: Translation = {
     pt: {
-      // Header
       'header.title': '🛍️ Lojinha Online',
       'header.cart': 'Ver Carrinho',
       'header.login': 'Entrar',
@@ -25,7 +24,6 @@ export class TranslationService {
       'header.admin': 'Admin',
       'header.welcome': 'Olá, {name}',
 
-      // Products
       'products.title': '🎉 Nossos Produtos',
       'products.subtitle': 'Descubra produtos incríveis com os melhores preços do mercado',
       'products.seeAll': 'Ver Todos os Produtos',
@@ -39,7 +37,6 @@ export class TranslationService {
       'products.reload': 'Recarregar Produtos',
       'products.loadMore': 'Carregar Mais Produtos',
 
-      // Cart
       'cart.title': '🛒 Seu Carrinho',
       'cart.items': 'itens',
       'cart.subtotal': 'Subtotal:',
@@ -51,14 +48,12 @@ export class TranslationService {
       'cart.empty': 'Seu carrinho está vazio',
       'cart.continue': '🛍️ Continuar Comprando',
 
-      // Admin
       'admin.products': '📦 Gerenciar Produtos',
       'admin.addProduct': '➕ Adicionar Produto',
       'admin.viewStore': '🏪 Ver Loja',
       'admin.myProducts': 'Meus Produtos',
       'admin.allProducts': 'Todos os Produtos',
 
-      // Common
       'common.back': '← Voltar',
       'common.save': '💾 Salvar',
       'common.edit': '✏️ Editar',
@@ -69,7 +64,7 @@ export class TranslationService {
       'common.no': 'Não'
     },
     en: {
-      // Header
+
       'header.title': '🛍️ Online Store',
       'header.cart': 'View Cart',
       'header.login': 'Login',
@@ -78,7 +73,6 @@ export class TranslationService {
       'header.admin': 'Admin',
       'header.welcome': 'Hello, {name}',
 
-      // Products
       'products.title': '🎉 Our Products',
       'products.subtitle': 'Discover amazing products with the best market prices',
       'products.seeAll': 'See All Products',
@@ -92,7 +86,6 @@ export class TranslationService {
       'products.reload': 'Reload Products',
       'products.loadMore': 'Load More Products',
 
-      // Cart
       'cart.title': '🛒 Your Cart',
       'cart.items': 'items',
       'cart.subtotal': 'Subtotal:',
@@ -104,14 +97,12 @@ export class TranslationService {
       'cart.empty': 'Your cart is empty',
       'cart.continue': '🛍️ Continue Shopping',
 
-      // Admin
       'admin.products': '📦 Manage Products',
       'admin.addProduct': '➕ Add Product',
       'admin.viewStore': '🏪 View Store',
       'admin.myProducts': 'My Products',
       'admin.allProducts': 'All Products',
 
-      // Common
       'common.back': '← Back',
       'common.save': '💾 Save',
       'common.edit': '✏️ Edit',
@@ -136,7 +127,6 @@ export class TranslationService {
     const lang = this.currentLang.value;
     let translation = this.translations[lang]?.[key] || key;
 
-    // Substitui parâmetros se fornecidos
     if (params) {
       Object.keys(params).forEach(param => {
         translation = translation.replace(`{${param}}`, params[param]);

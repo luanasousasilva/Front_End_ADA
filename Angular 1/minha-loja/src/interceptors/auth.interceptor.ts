@@ -8,7 +8,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const currentUser = authService.getCurrentUser();
 
   if (currentUser) {
-    // Adiciona headers de autenticação se necessário
     const authReq = req.clone({
       setHeaders: {
         'Authorization': `Bearer ${currentUser.id}`,

@@ -50,7 +50,6 @@ export class ShoppingCartComponent {
       }
     }
 
-    // Fecha os modais independente da confirmação
     this.showRemoveModal = false;
     this.showClearModal = false;
     this.productIdToRemove = null;

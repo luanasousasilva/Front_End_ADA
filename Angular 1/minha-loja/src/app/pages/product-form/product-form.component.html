@@ -111,7 +111,6 @@
           <div class="mb-3">
             <label class="form-label">Imagem do Produto *</label>
 
-            <!-- Upload de Arquivo -->
             <div class="mb-2">
               <input
                 type="file"
@@ -123,7 +122,6 @@
               <small class="text-muted">Formatos: JPG, PNG, GIF (máx. 5MB)</small>
             </div>
 
-            <!-- Ou URL -->
             <div class="mt-3">
               <small class="text-muted">Ou insira uma URL:</small>
               <input
@@ -142,7 +140,6 @@
             }
           </div>
 
-          <!-- Preview da Imagem -->
           @if (imagePreview || productForm.get('image')?.value) {
           <div class="image-preview-container mb-3">
             <h6>Preview da Imagem:</h6>

@@ -2,14 +2,11 @@
   <div class="container">
     <div class="header-content">
       <h1 class="logo">{{ 'header.title' | translate }}</h1>
-
       <div class="header-actions">
-        <!-- Seletor de Idioma -->
         <button class="btn btn-language" (click)="switchLanguage()">
           {{ (currentLang | async) === 'pt' ? '🇧🇷 PT' : '🇺🇸 EN' }}
         </button>
 
-        <!-- Status do Usuário -->
         @if (currentUser | async; as user) {
         <div class="user-info">
           <span class="user-name">{{ 'header.welcome' | translate:{name: user.name} }}</span>

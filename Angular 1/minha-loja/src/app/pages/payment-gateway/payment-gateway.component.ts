@@ -22,13 +22,11 @@ export class PaymentGatewayComponent {
 
   constructor() {
     this.paymentForm = this.fb.group({
-      // Step 1: Dados Pessoais
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
       address: ['', [Validators.required]],
 
-      // Step 2: Dados de Pagamento
       cardNumber: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
       cardHolder: ['', [Validators.required]],
       expiryDate: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
@@ -50,13 +48,8 @@ export class PaymentGatewayComponent {
 
   submitPayment(): void {
     if (this.paymentForm.valid) {
-      // Simula processamento do pagamento
       console.log('Pagamento processado:', this.paymentForm.value);
-
-      // Limpa o carrinho
       this.store.dispatch(CartActions.clearCart());
-
-      // Redireciona para página de sucesso
       alert('Pagamento realizado com sucesso! Obrigado pela compra.');
       this.router.navigate(['/']);
     }

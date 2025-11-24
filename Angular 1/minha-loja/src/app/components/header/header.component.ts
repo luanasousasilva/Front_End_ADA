@@ -27,7 +27,6 @@ export class HeaderComponent {
 
   logout(): void {
     this.authService.logout();
-    // Força o recarregamento da página para atualizar o estado
     window.location.reload();
   }
 }

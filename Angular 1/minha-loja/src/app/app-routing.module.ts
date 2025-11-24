@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { adminGuard } from './guards/admin.guard';
 
-// @ts-ignore
+
 export const routes: Routes = [
   {
     path: '',

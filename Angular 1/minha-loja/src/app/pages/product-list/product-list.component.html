@@ -1,5 +1,4 @@
 <div class="container py-4">
-  <!-- Hero Section -->
   <div class="hero-section glass-card p-4 mb-4 text-center">
     <h1 class="display-6 fw-bold mb-3">{{ 'products.title' | translate }}</h1>
     <p class="lead text-muted mb-3">{{ 'products.subtitle' | translate }}</p>
@@ -31,7 +30,6 @@
     </div>
   </div>
 
-  <!-- Categorias com Defer -->
   @defer (on viewport) {
   <div class="categories-section mb-4">
     <app-category-list (categorySelected)="onCategorySelected($event)"></app-category-list>
@@ -45,7 +43,6 @@
   </div>
   }
 
-  <!-- Header dos Produtos -->
   <div class="products-header glass-card p-3 mb-3">
     <div class="row align-items-center">
       <div class="col-md-6">
@@ -73,7 +70,6 @@
     </div>
   </div>
 
-  <!-- Loading State -->
   @if (isLoading) {
   <div class="glass-card p-5 text-center">
     <div class="spinner-border text-primary" role="status">
@@ -82,7 +78,7 @@
     <p class="mt-3">Carregando produtos...</p>
   </div>
   } @else {
-  <!-- Grid de Produtos com Defer -->
+
   @defer (on viewport) {
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
     @for (product of products; track product.id) {
@@ -109,7 +105,6 @@
   </div>
   }
 
-  <!-- Estado Vazio -->
   @if (products.length === 0) {
   <div class="empty-state glass-card p-4 text-center my-4">
     <div class="empty-icon mb-3">
