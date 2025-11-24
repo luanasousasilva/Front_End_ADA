@@ -17,8 +17,12 @@ export interface Product {
     rate: number;
     count: number;
   };
-  createdAt: string;
-  stock: number;
+
+  isCustom?: boolean;
+  createdBy?: number;
+  source?: 'api' | 'custom';
+  createdAt?: string;
+  stock?: number;
 }
 
 export interface CartItem extends Product {
