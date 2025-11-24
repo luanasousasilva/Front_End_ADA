@@ -23,11 +23,9 @@
       [routerLink]="['/product', product.id]">
 
     <div class="product-overlay">
-      <button
-        class="btn btn-modern"
-        (click)="addToCart($event)">
-        🛒 Adicionar
-      </button>
+      <a [routerLink]="['/product', product.id]" class="btn btn-modern">
+        👀 Ver Detalhes
+      </a>
     </div>
   </div>
 
