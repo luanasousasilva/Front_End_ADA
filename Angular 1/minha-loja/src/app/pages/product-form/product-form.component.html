@@ -1,6 +1,11 @@
 <div class="container py-4">
   <div class="glass-card p-4 mb-4">
-    <h2 class="mb-0">{{ isEditMode ? '✏️ Editar Produto' : '➕ Adicionar Novo Produto' }}</h2>
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">{{ isEditMode ? '✏️ Editar Produto' : '➕ Adicionar Novo Produto' }}</h2>
+      <button class="btn btn-outline-secondary" (click)="goBack()">
+        ← Voltar para Loja
+      </button>
+    </div>
   </div>
 
   @if (isLoading) {
@@ -97,13 +102,14 @@
           @if (productForm.get('image')?.value) {
           <div class="image-preview-container mb-3">
             <h6>Preview da Imagem:</h6>
-            <img [src]="productForm.get('image')?.value" alt="Preview" class="img-fluid rounded" style="max-height: 200px;">
+            <img [src]="productForm.get('image')?.value" alt="Preview" class="img-fluid rounded" style="max-height: 200px;"
+                 (error)="onImageError($event)">
           </div>
           }
         </div>
       </div>
 
-      <div class="d-flex gap-2 mt-4">
+      <div class="d-flex gap-2 mt-4 flex-wrap">
         <button
           type="submit"
           [disabled]="productForm.invalid || isLoading"
@@ -113,8 +119,14 @@
         <button
           type="button"
           class="btn btn-secondary"
-          (click)="router.navigate(['/admin/products'])">
-          ← Cancelar
+          (click)="goBack()">
+          ← Voltar para Loja
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="goToAdmin()">
+          ⚙️ Painel Admin
         </button>
       </div>
     </form>

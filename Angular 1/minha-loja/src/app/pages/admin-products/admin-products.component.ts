@@ -1,42 +1,63 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AdminService} from "../../services/admin.service";
 import { Product } from '../../../types';
-import { ConfirmationModalComponent } from "../../../confirmation-modal.component";
-import { TruncatePipe} from "../../pipes/truncate.pipe";
-
+import { TruncatePipe } from "../../../truncate.pipe";
+import { TranslatePipe } from "../../pipes/translate.pipe";
+import { ProductManagementService } from "../../services/product-management.service";
+import { AdminService } from "../../services/admin.service";
 
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [CommonModule, ConfirmationModalComponent, TruncatePipe],
+  imports: [CommonModule, TruncatePipe, TranslatePipe],
   templateUrl: './admin-products.component.html',
-
   styleUrl: './admin-products.component.css'
 })
 export class AdminProductsComponent implements OnInit {
+  private productManagementService = inject(ProductManagementService);
   private adminService = inject(AdminService);
   private router = inject(Router);
 
   products: Product[] = [];
+  apiProducts: Product[] = [];
+  customProducts: Product[] = [];
   showDeleteModal = false;
   productToDelete: number | null = null;
   isLoading = true;
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadAllProducts();
   }
 
-  loadProducts(): void {
+  loadAllProducts(): void {
     this.isLoading = true;
+
     this.adminService.getProducts().subscribe({
-      next: (products) => {
-        this.products = products;
-        this.isLoading = false;
+      next: (apiProducts) => {
+        this.apiProducts = apiProducts.map(product => ({
+          ...product,
+          isCustom: false,
+          source: 'api'
+        }));
+
+        this.productManagementService.getProducts().subscribe({
+          next: (allProducts) => {
+            this.customProducts = allProducts.filter(product =>
+              this.productManagementService.isCustomProduct(product)
+            );
+            this.products = [...this.apiProducts, ...this.customProducts];
+            this.isLoading = false;
+          },
+          error: (error) => {
+            console.error('Erro ao carregar produtos customizados:', error);
+            this.products = [...this.apiProducts];
+            this.isLoading = false;
+          }
+        });
       },
       error: (error) => {
-        console.error('Erro ao carregar produtos:', error);
+        console.error('Erro ao carregar produtos da API:', error);
         this.isLoading = false;
       }
     });
@@ -47,31 +68,48 @@ export class AdminProductsComponent implements OnInit {
   }
 
   editProduct(id: number): void {
-    this.router.navigate(['/admin/products/edit', id]);
+    const product = this.products.find(p => p.id === id);
+    if (product && this.isCustomProduct(product)) {
+      this.router.navigate(['/admin/products/edit', id]);
+    } else {
+      alert('Este produto é da API FakeStore e não pode ser editado. Adicione um produto customizado para editar.');
+    }
   }
 
   deleteProduct(id: number): void {
-    this.productToDelete = id;
-    this.showDeleteModal = true;
+    const product = this.products.find(p => p.id === id);
+    if (product && this.isCustomProduct(product)) {
+      this.productToDelete = id;
+      this.showDeleteModal = true;
+    } else {
+      alert('Este produto é da API FakeStore e não pode ser excluído. Você só pode excluir produtos que você adicionou.');
+    }
   }
 
-  onModalConfirmed(event: boolean): void {
-    if (event && this.productToDelete) {
-      this.adminService.deleteProduct(this.productToDelete).subscribe({
-        next: () => {
-          this.products = this.products.filter(p => p.id !== this.productToDelete);
-          this.showDeleteModal = false;
-          this.productToDelete = null;
-        },
-        error: (error) => {
-          console.error('Erro ao deletar produto:', error);
-          this.showDeleteModal = false;
-          this.productToDelete = null;
-        }
-      });
-    } else {
+  handleModalResponse(): void {
+    if (this.productToDelete) {
+      this.productManagementService.deleteProduct(this.productToDelete);
       this.showDeleteModal = false;
       this.productToDelete = null;
+      // Recarrega a lista
+      this.loadAllProducts();
     }
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.productToDelete = null;
+  }
+
+  goToStore(): void {
+    this.router.navigate(['/']);
+  }
+
+  getCustomProductsStock(): number {
+    return this.customProducts.reduce((sum, product) => sum + (product.stock || 0), 0);
+  }
+
+  isCustomProduct(product: Product): boolean {
+    return this.productManagementService.isCustomProduct(product);
   }
 }

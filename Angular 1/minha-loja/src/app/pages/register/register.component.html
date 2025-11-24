@@ -1,14 +1,21 @@
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-md-6 col-lg-4">
+      <!-- Botão Voltar para Loja -->
+      <div class="mb-3">
+        <button class="btn btn-outline-secondary btn-sm" (click)="goToStore()">
+          ← Voltar para Loja
+        </button>
+      </div>
+
       <div class="glass-card p-4">
         <div class="text-center mb-4">
-          <h1 class="h3 fw-bold">{{ 'register.title' | translate }}</h1>
+          <h1 class="h3 fw-bold">📝 Criar Nova Conta</h1>
         </div>
 
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <div class="mb-3">
-            <label for="name" class="form-label">{{ 'register.name' | translate }}</label>
+            <label for="name" class="form-label">Nome Completo</label>
             <input
               type="text"
               id="name"
@@ -71,7 +78,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="confirmPassword" class="form-label">{{ 'register.confirmPassword' | translate }}</label>
+            <label for="confirmPassword" class="form-label">Confirmar Senha</label>
             <input
               type="password"
               id="confirmPassword"
@@ -95,11 +102,11 @@
           }
 
           <button type="submit" class="btn btn-modern w-100 mb-3">
-            {{ 'register.submit' | translate }}
+            Cadastrar
           </button>
 
           <div class="text-center">
-            <span class="text-muted">{{ 'register.haveAccount' | translate }}</span>
+            <span class="text-muted">Já tem uma conta?</span>
             <a routerLink="/login" class="ms-1">Entrar</a>
           </div>
         </form>

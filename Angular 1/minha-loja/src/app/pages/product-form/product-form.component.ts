@@ -2,7 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from "../../services/auth.service";
 import { AdminService } from "../../services/admin.service";
+import { ProductManagementService } from "../../services/product-management.service";
 
 @Component({
   selector: 'app-product-form',
@@ -14,10 +16,18 @@ import { AdminService } from "../../services/admin.service";
 export class ProductFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private adminService = inject(AdminService);
+  private productManagementService = inject(ProductManagementService);
+  private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
-  // Tornar o router público para acesso no template
-  constructor(public router: Router) {
+  productForm: FormGroup;
+  isEditMode = false;
+  productId: number | null = null;
+  isLoading = false;
+  categories: string[] = [];
+
+  constructor() {
     this.productForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       price: ['', [Validators.required, Validators.min(0.01)]],
@@ -26,12 +36,6 @@ export class ProductFormComponent implements OnInit {
       image: ['', Validators.required]
     });
   }
-
-  productForm: FormGroup;
-  isEditMode = false;
-  productId: number | null = null;
-  isLoading = false;
-  categories: string[] = [];
 
   ngOnInit(): void {
     this.loadCategories();
@@ -60,22 +64,34 @@ export class ProductFormComponent implements OnInit {
   loadProductData(): void {
     if (this.productId) {
       this.isLoading = true;
-      this.adminService.getProductById(this.productId).subscribe({
-        next: (product) => {
-          this.productForm.patchValue({
-            title: product.title,
-            price: product.price,
-            description: product.description,
-            category: product.category,
-            image: product.image
-          });
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Erro ao carregar produto:', error);
-          this.isLoading = false;
-        }
-      });
+      const customProduct = this.productManagementService.getProductById(this.productId);
+      if (customProduct && this.productManagementService.isCustomProduct(customProduct)) {
+        this.productForm.patchValue({
+          title: customProduct.title,
+          price: customProduct.price,
+          description: customProduct.description,
+          category: customProduct.category,
+          image: customProduct.image
+        });
+        this.isLoading = false;
+      } else {
+        this.adminService.getProductById(this.productId).subscribe({
+          next: (product) => {
+            this.productForm.patchValue({
+              title: product.title,
+              price: product.price,
+              description: product.description,
+              category: product.category,
+              image: product.image
+            });
+            this.isLoading = false;
+          },
+          error: (error) => {
+            console.error('Erro ao carregar produto:', error);
+            this.isLoading = false;
+          }
+        });
+      }
     }
   }
 
@@ -88,30 +104,47 @@ export class ProductFormComponent implements OnInit {
     if (this.productForm.valid) {
       this.isLoading = true;
       const productData = this.productForm.value;
+      const currentUser = this.authService.getCurrentUser();
+
+      const enhancedProductData = {
+        ...productData,
+        rating: { rate: 4.5, count: 0 },
+        createdAt: new Date().toISOString().split('T')[0],
+        stock: 10,
+        createdBy: currentUser?.id,
+        isCustom: true,
+        source: 'custom'
+      };
 
       if (this.isEditMode && this.productId) {
-        this.adminService.updateProduct(this.productId, productData).subscribe({
-          next: () => {
-            this.isLoading = false;
-            this.router.navigate(['/admin/products']);
-          },
-          error: (error) => {
-            console.error('Erro ao atualizar produto:', error);
-            this.isLoading = false;
-          }
-        });
+        const existingProduct = this.productManagementService.getProductById(this.productId);
+        if (existingProduct && this.productManagementService.isCustomProduct(existingProduct)) {
+          this.productManagementService.updateProduct(this.productId, enhancedProductData);
+          this.isLoading = false;
+          alert('Produto atualizado com sucesso!');
+          this.router.navigate(['/admin/products']);
+        } else {
+          alert('Este produto não pode ser editado pois não é um produto customizado.');
+          this.isLoading = false;
+        }
       } else {
-        this.adminService.createProduct(productData).subscribe({
-          next: () => {
-            this.isLoading = false;
-            this.router.navigate(['/admin/products']);
-          },
-          error: (error) => {
-            console.error('Erro ao criar produto:', error);
-            this.isLoading = false;
-          }
-        });
+        this.productManagementService.addProduct(enhancedProductData);
+        this.isLoading = false;
+        alert('Produto adicionado com sucesso!');
+        this.router.navigate(['/admin/products']);
       }
+    } else {
+      Object.keys(this.productForm.controls).forEach(key => {
+        this.productForm.get(key)?.markAsTouched();
+      });
     }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/admin/products']);
+  }
+
+  goToAdmin(): void {
+    this.router.navigate(['/admin']);
   }
 }

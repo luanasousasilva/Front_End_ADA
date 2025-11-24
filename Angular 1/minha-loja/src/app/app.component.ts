@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./components/header/header.component";
 import { FooterComponent } from './components/footer/footer.component';
-import { AuthService } from "./services/auth.service";
-import { TranslationService } from "./services/translation.service";
+import { AuthService } from './services/auth.service';
+import { TranslationService } from './services/translation.service';
 
 @Component({
   selector: 'app-root',

@@ -1,14 +1,16 @@
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-md-6 col-lg-4">
+
+
       <div class="glass-card p-4">
         <div class="text-center mb-4">
-          <h1 class="h3 fw-bold">{{ 'login.title' | translate }}</h1>
+          <h1 class="h3 fw-bold">🔐 Entrar na Sua Conta</h1>
         </div>
 
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="mb-3">
-            <label for="email" class="form-label">{{ 'login.email' | translate }}</label>
+            <label for="email" class="form-label">E-mail</label>
             <input
               type="email"
               id="email"
@@ -29,7 +31,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="password" class="form-label">{{ 'login.password' | translate }}</label>
+            <label for="password" class="form-label">Senha</label>
             <input
               type="password"
               id="password"
@@ -54,12 +56,18 @@
           }
 
           <button type="submit" class="btn btn-modern w-100 mb-3">
-            {{ 'login.submit' | translate }}
+            Entrar
           </button>
 
+          <div class="mb-3">
+            <button class="btn btn-outline-secondary w-100 mb-3" (click)="goToStore()">
+              ← Voltar para Loja
+            </button>
+          </div>
+
           <div class="text-center">
-            <span class="text-muted">{{ 'login.noAccount' | translate }}</span>
-            <a routerLink="/register" class="ms-1">{{ 'login.register' | translate }}</a>
+            <span class="text-muted">Não tem uma conta?</span>
+            <a routerLink="/register" class="ms-1">Cadastre-se</a>
           </div>
         </form>
       </div>

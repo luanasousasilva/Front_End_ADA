@@ -1,13 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { RouterLink, Router } from "@angular/router";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as CartActions from '../../store/cart.actions';
 import { CartItem } from "../../../types";
 import { CartState } from '../../store/cart.state';
-import { ConfirmationModalComponent } from "../../../confirmation-modal.component";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -17,31 +15,45 @@ import { ConfirmationModalComponent } from "../../../confirmation-modal.componen
   styleUrl: './shopping-cart.component.css'
 })
 export class ShoppingCartComponent {
-  private modalService = inject(NgbModal);
-  private router = inject(Router);
-  private store = inject(Store<{ cart: CartState }>);
+  showRemoveModal = false;
+  showClearModal = false;
+  productIdToRemove: number | null = null;
 
   cartItems: Observable<CartItem[]>;
   cartTotal: Observable<number>;
   cartItemCount: Observable<number>;
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private store: Store<{ cart: CartState }>
+  ) {
     this.cartItems = this.store.select(state => state.cart.items);
     this.cartTotal = this.store.select(state => state.cart.total);
     this.cartItemCount = this.store.select(state => state.cart.itemCount);
   }
 
-  async removeItem(productId: number) {
-    const modalRef = this.modalService.open(ConfirmationModalComponent);
+  removeItem(productId: number) {
+    this.productIdToRemove = productId;
+    this.showRemoveModal = true;
+  }
 
-    try {
-      const result = await modalRef.result;
-      if (result) {
-        this.store.dispatch(CartActions.removeProductFromCart({ productId }));
+  clearCart() {
+    this.showClearModal = true;
+  }
+
+  onModalConfirmed(confirmed: boolean) {
+    if (confirmed) {
+      if (this.showRemoveModal && this.productIdToRemove) {
+        this.store.dispatch(CartActions.removeProductFromCart({ productId: this.productIdToRemove }));
+      } else if (this.showClearModal) {
+        this.store.dispatch(CartActions.clearCart());
       }
-    } catch (dismissed) {
-      // Modal foi fechado sem confirmação
     }
+
+    // Fecha os modais independente da confirmação
+    this.showRemoveModal = false;
+    this.showClearModal = false;
+    this.productIdToRemove = null;
   }
 
   increaseQuantity(productId: number) {
@@ -50,19 +62,6 @@ export class ShoppingCartComponent {
 
   decreaseQuantity(productId: number) {
     this.store.dispatch(CartActions.decreaseQuantity({ productId }));
-  }
-
-  async clearCart() {
-    const modalRef = this.modalService.open(ConfirmationModalComponent);
-
-    try {
-      const result = await modalRef.result;
-      if (result) {
-        this.store.dispatch(CartActions.clearCart());
-      }
-    } catch (dismissed) {
-      // Modal foi fechado sem confirmação
-    }
   }
 
   goToCheckout() {

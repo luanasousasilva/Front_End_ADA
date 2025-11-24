@@ -12,20 +12,20 @@
         <!-- Status do Usuário -->
         @if (currentUser | async; as user) {
         <div class="user-info">
-          <span class="user-name">Olá, {{ user.name }}</span>
+          <span class="user-name">{{ 'header.welcome' | translate:{name: user.name} }}</span>
           @if (user.role === 'admin') {
           <a routerLink="/admin" class="btn btn-admin ms-2">
-            ⚙️ Admin
+            ⚙️ {{ 'header.admin' | translate }}
           </a>
           }
           <button class="btn btn-logout ms-2" (click)="logout()">
-            🚪 Sair
+            🚪 {{ 'header.logout' | translate }}
           </button>
         </div>
         } @else {
         <div class="auth-buttons">
-          <a routerLink="/login" class="btn btn-auth me-2">Entrar</a>
-          <a routerLink="/register" class="btn btn-auth btn-register">Cadastrar</a>
+          <a routerLink="/login" class="btn btn-auth me-2">{{ 'header.login' | translate }}</a>
+          <a routerLink="/register" class="btn btn-auth btn-register">{{ 'header.register' | translate }}</a>
         </div>
         }
 

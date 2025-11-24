@@ -96,4 +96,51 @@
   </div>
   }
   }
+
+  <!-- Modal de Confirmação para Remover Item -->
+  @if (showRemoveModal) {
+  <div class="modal-overlay" (click)="onModalConfirmed(false)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h4 class="modal-title">Remover Item</h4>
+        <button type="button" class="btn-close" (click)="onModalConfirmed(false)">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Tem certeza que deseja remover este item do carrinho?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onModalConfirmed(false)">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="onModalConfirmed(true)">
+          Remover
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Modal de Confirmação para Limpar Carrinho -->
+  @if (showClearModal) {
+  <div class="modal-overlay" (click)="onModalConfirmed(false)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h4 class="modal-title">Limpar Carrinho</h4>
+        <button type="button" class="btn-close" (click)="onModalConfirmed(false)">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Tem certeza que deseja limpar todo o carrinho?</p>
+        <p class="text-muted small">Esta ação não pode ser desfeita.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onModalConfirmed(false)">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="onModalConfirmed(true)">
+          Limpar Tudo
+        </button>
+      </div>
+    </div>
+  </div>
+  }
 </div>

@@ -8,6 +8,7 @@ import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [CommonModule, CartStatusComponent, RouterLink, TranslatePipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
@@ -26,5 +27,7 @@ export class HeaderComponent {
 
   logout(): void {
     this.authService.logout();
+    // Força o recarregamento da página para atualizar o estado
+    window.location.reload();
   }
 }
